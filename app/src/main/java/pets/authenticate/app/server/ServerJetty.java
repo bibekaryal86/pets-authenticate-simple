@@ -1,16 +1,17 @@
-package nospring.service.skeleton.app.server;
+package pets.authenticate.app.server;
 
 import jakarta.servlet.DispatcherType;
 import lombok.extern.slf4j.Slf4j;
-import nospring.service.skeleton.app.servlet.AppReset;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import nospring.service.skeleton.app.filter.ServletFilter;
-import nospring.service.skeleton.app.util.Util;
-import nospring.service.skeleton.app.servlet.AppPing;
+import pets.authenticate.app.filter.ServletFilter;
+import pets.authenticate.app.servlet.AppPing;
+import pets.authenticate.app.servlet.LoginServlet;
+import pets.authenticate.app.servlet.RefreshServlet;
+import pets.authenticate.app.util.Util;
 
 import java.util.EnumSet;
 
@@ -18,8 +19,6 @@ import java.util.EnumSet;
 public class ServerJetty {
 
     public void start() throws Exception {
-        log.info("Start Jetty Server Initialization!!!");
-
         QueuedThreadPool threadPool = new QueuedThreadPool(Util.SERVER_MAX_THREADS, Util.SERVER_MIN_THREADS, Util.SERVER_IDLE_TIMEOUT);
         Server server = new Server(threadPool);
 
@@ -31,7 +30,6 @@ public class ServerJetty {
 
         server.setHandler(getServletHandler());
         server.start();
-        log.info("Finish Jetty Server Initialization!!!");
     }
 
     private ServletHandler getServletHandler() {
@@ -39,7 +37,9 @@ public class ServerJetty {
         servletHandler.addFilterWithMapping(ServletFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
 
         servletHandler.addServletWithMapping(AppPing.class, Util.CONTEXT_PATH + "/tests/ping");
-        servletHandler.addServletWithMapping(AppReset.class, Util.CONTEXT_PATH + "/tests/reset");
+
+        servletHandler.addServletWithMapping(LoginServlet.class, Util.CONTEXT_PATH + "/login");
+        servletHandler.addServletWithMapping(RefreshServlet.class, Util.CONTEXT_PATH + "/refresh");
 
         return servletHandler;
     }

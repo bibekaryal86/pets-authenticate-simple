@@ -21,6 +21,10 @@ dependencies {
     implementation 'org.eclipse.jetty:jetty-server:11.0.7'
     implementation 'org.eclipse.jetty:jetty-servlet:11.0.7'
     implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.springframework.security:spring-security-crypto:5.6.1'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation 'commons-logging:commons-logging:1.2'
 
     implementation('org.slf4j:slf4j-api') {
         version {
@@ -28,26 +32,19 @@ dependencies {
         }
     }
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-
-    // IF USING MONGO
-    // implementation 'org.mongodb:mongodb-driver-sync:4.4.0'
-
-    // FOR TESTING
-    // testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    // testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'nosrping.service.skeleton.App'
+    mainClass = 'pets.authenticate.App'
 }
 
 jar {
-    archiveFileName = 'nospring-service-skeleton.jar'
+    archiveFileName = 'pets-authenticate-simple.jar'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
-        attributes "Main-Class": "nospring.service.skeleton.App"
+        attributes "Main-Class": "pets.authenticate.App"
     }
 
     from {
