@@ -8,9 +8,13 @@ import pets.authenticate.app.model.TokenResponse;
 import pets.authenticate.app.model.UserDetails;
 import pets.authenticate.app.service.TokenKeysService;
 import pets.authenticate.app.service.UserService;
-import pets.authenticate.app.util.Util;
 
 import java.io.IOException;
+
+import static pets.authenticate.app.util.Util.getGson;
+import static pets.authenticate.app.util.Util.getRequestBody;
+import static pets.authenticate.app.util.Util.hasText;
+import static pets.authenticate.app.util.Util.validateRequest;
 
 public class LoginServlet extends HttpServlet {
     @Override
@@ -19,9 +23,9 @@ public class LoginServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json");
 
-        TokenRequest tokenRequest = (TokenRequest) Util.getRequestBody(request, TokenRequest.class);
+        TokenRequest tokenRequest = (TokenRequest) getRequestBody(request, TokenRequest.class);
 
-        if (!Util.validateRequest(tokenRequest)) {
+        if (!validateRequest(tokenRequest)) {
             response.setStatus(400);
         } else {
             UserService userService = new UserService();
@@ -30,14 +34,14 @@ public class LoginServlet extends HttpServlet {
             if (userDetails == null) {
                 response.setStatus(401);
             } else {
-                if (!Util.hasText(tokenRequest.getSourceIp())) {
+                if (!hasText(tokenRequest.getSourceIp())) {
                     tokenRequest.setSourceIp(request.getRemoteAddr());
                 }
 
                 TokenKeysService tokenKeysService = new TokenKeysService();
                 String token = tokenKeysService.createToken(tokenRequest);
 
-                if (!Util.hasText(token)) {
+                if (!hasText(token)) {
                     response.setStatus(500);
                 } else {
                     response.setStatus(200);
@@ -48,6 +52,6 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         }
-        response.getWriter().print(Util.getGson().toJson(tokenResponse));
+        response.getWriter().print(getGson().toJson(tokenResponse));
     }
 }

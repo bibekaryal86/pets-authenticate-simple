@@ -6,9 +6,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import pets.authenticate.app.model.TokenRequest;
 import pets.authenticate.app.model.TokenResponse;
 import pets.authenticate.app.service.TokenKeysService;
-import pets.authenticate.app.util.Util;
 
 import java.io.IOException;
+
+import static pets.authenticate.app.util.Util.getGson;
+import static pets.authenticate.app.util.Util.getRequestBody;
+import static pets.authenticate.app.util.Util.hasText;
 
 public class RefreshServlet extends HttpServlet {
     @Override
@@ -17,15 +20,15 @@ public class RefreshServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json");
 
-        TokenRequest tokenRequest = (TokenRequest) Util.getRequestBody(request, TokenRequest.class);
+        TokenRequest tokenRequest = (TokenRequest) getRequestBody(request, TokenRequest.class);
 
-        if (tokenRequest == null || !Util.hasText(tokenRequest.getToken())) {
+        if (tokenRequest == null || !hasText(tokenRequest.getToken())) {
             response.setStatus(401);
         } else {
             TokenKeysService tokenKeysService = new TokenKeysService();
             String newToken = tokenKeysService.refreshToken(tokenRequest.getToken(), tokenRequest.isLogOut());
 
-            if (!Util.hasText(newToken)) {
+            if (!hasText(newToken)) {
                 response.setStatus(403);
             } else {
                 response.setStatus(200);
@@ -35,6 +38,6 @@ public class RefreshServlet extends HttpServlet {
             }
         }
 
-        response.getWriter().print(Util.getGson().toJson(tokenResponse));
+        response.getWriter().print(getGson().toJson(tokenResponse));
     }
 }

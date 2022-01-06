@@ -7,10 +7,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import pets.authenticate.app.model.TokenRequest;
-import pets.authenticate.app.util.Util;
 
 import java.util.Date;
 import java.util.Map;
+
+import static pets.authenticate.app.util.Util.SECRET_KEY;
+import static pets.authenticate.app.util.Util.getSystemEnvProperty;
 
 @Slf4j
 public class TokenKeysService {
@@ -32,7 +34,7 @@ public class TokenKeysService {
 
             token = Jwts.builder()
                     .setClaims(claims)
-                    .signWith(SignatureAlgorithm.HS512, Util.getSystemEnvProperty(Util.SECRET_KEY))
+                    .signWith(SignatureAlgorithm.HS512, getSystemEnvProperty(SECRET_KEY))
                     .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                     .compact();
         } catch (Exception ex) {
@@ -54,13 +56,13 @@ public class TokenKeysService {
             }
 
             Claims claims = Jwts.parser()
-                    .setSigningKey(Util.getSystemEnvProperty(Util.SECRET_KEY))
+                    .setSigningKey(getSystemEnvProperty(SECRET_KEY))
                     .parseClaimsJws(oldToken)
                     .getBody();
             // TokenRequest tokenRequest = objectMapper.convertValue(claims, TokenRequest.class);   // NOSONAR
             newToken = Jwts.builder()
                     .setClaims(claims)
-                    .signWith(SignatureAlgorithm.HS512, Util.getSystemEnvProperty(Util.SECRET_KEY))
+                    .signWith(SignatureAlgorithm.HS512, getSystemEnvProperty(SECRET_KEY))
                     .setExpiration(expirationDate)
                     .compact();
         } catch (Exception ex) {
