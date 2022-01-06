@@ -1,5 +1,7 @@
 # pets-authenticate-layer-simple
 
+* Main Repo: https://github.com/bibekaryal86/pets-authenticate-layer
+
 This is a simple app which provides authentication service/server for Personal Expenses Tracking System application.
 This app is a scaled down version of `pets-authenticate-layer` app found
 here: https://github.com/bibekaryal86/pets-authenticate-layer. The other app uses Spring Boot with RestTemplate
