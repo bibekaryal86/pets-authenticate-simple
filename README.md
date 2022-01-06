@@ -25,4 +25,4 @@ To run the app, we need to supply the following environment variables:
 
 The app has been deployed to GCP:
 
-* https://pets-database.appspot.com/pets-database/tests/ping
+* https://pets-authenticate.appspot.com/pets-authenticate/tests/ping
